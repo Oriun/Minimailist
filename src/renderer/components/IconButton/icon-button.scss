@@ -1,0 +1,22 @@
+.icon-button {
+  width: 40px;
+  aspect-ratio: 1;
+  padding: 8px;
+  border-radius: 6px;
+  overflow: hidden;
+  box-sizing: border-box;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 0 0 0 3px var(--picton-blue) inset;
+  }
+
+  &:active {
+    box-shadow: 0 0 0 3px var(--violet-red) inset;
+  }
+}

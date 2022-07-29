@@ -1,0 +1,57 @@
+.list-header {
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+  gap: 64px;
+  flex-shrink: 0;
+  flex-grow: 0;
+  color: white;
+  width: 100%;
+
+  h6 {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  p {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    padding: 0px;
+    gap: 16px;
+    width: 100%;
+    flex-shrink: 1;
+    margin: 0;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    span {
+      // width: 100%;
+      width: 1px;
+      font-family: 'Nunito Sans';
+      font-style: normal;
+      font-weight: 300;
+      font-size: 16px;
+      line-height: 22px;
+      color: #FFFFFF;
+      opacity: 0.6;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      flex-shrink: 1;
+      flex-grow: 1;
+      text-decoration: underline;
+      text-underline-offset: 4px;
+      text-decoration-thickness: .75px;
+      cursor: pointer;
+    }
+  }
+}

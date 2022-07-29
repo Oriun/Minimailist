@@ -1,0 +1,129 @@
+.mailist-item {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0px 0px 0px 48px;
+  gap: 20px;
+  background: #FFFFFF;
+  border: 1px solid #D0D0D0;
+  border-radius: 8px;
+  width: 100%;
+  height: 64px;
+  cursor: pointer;
+  transition-delay: .1s;
+  transition-duration: .3s;
+  transition-property: background;
+  overflow: hidden;
+
+  >* {
+    flex-shrink: 0;
+  }
+
+  .date {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--gray-4);
+    min-width: 96px;
+  }
+
+  .main {
+    flex-grow: 1;
+    flex-shrink: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0px;
+
+    .object {
+      font-family: 'Nunito Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 22px;
+      color: var(--gray-4);
+    }
+
+    .details {
+      font-family: 'Nunito Sans';
+      font-style: normal;
+      font-weight: 500;
+      font-size: 14px;
+      line-height: 19px;
+      color: var(--violet-red);
+      height: 0px;
+      overflow: hidden;
+      transition-duration: .3s;
+      transition-property: height;
+    }
+  }
+
+  .id {
+    font-family: 'Nunito Sans';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 22px;
+    color: var(--violet-red);
+    width: 0px;
+    overflow: hidden;
+    opacity: 0.2;
+    text-align: right;
+    transition-duration: .6s;
+    transition-property: width opacity;
+  }
+
+  >.action-button-container {
+    height: 100%;
+    background-color: white;
+    width: min-content;
+    transition-duration: .4s;
+    transition-property: width;
+    flex-grow: 0;
+
+    >* {
+      width: 100%;
+    }
+  }
+
+  &:hover,
+  &.selected {
+    .main .details {
+      height: 19px;
+      transition-duration: .3s;
+      transition-property: height;
+    }
+
+    .id {
+      width: 60px;
+      opacity: 1;
+      transition-duration: .6s;
+      transition-property: width opacity;
+    }
+  }
+
+  &.selected {
+    border: 1px solid #FFFFFF;
+    background: var(--cornflower-blue);
+    transition-duration: .2s;
+    transition-property: background;
+
+    .date,
+    .main .object {
+      color: #FFFFFF;
+    }
+
+    .main .details,
+    .id {
+      color: var(--amber);
+    }
+
+    >.action-button-container {
+      width: 350px;
+      transition-duration: .4s;
+      transition-property: width;
+    }
+  }
+}

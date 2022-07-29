@@ -1,0 +1,79 @@
+.action-button {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 0 48px 0 20px;
+  gap: 10px;
+  height: 100%;
+  background: #FFFFFF;
+
+  .action-button-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+    position: relative;
+    transition-duration: .3s;
+    transition-property: width;
+
+    .tag-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      transition-duration: .3s;
+      transition-property: opacity;
+
+      span.tag {
+        font-family: 'Nunito Sans';
+        font-style: normal;
+        font-weight: 500;
+        font-size: 16px;
+        line-height: 22px;
+        text-align: right;
+        width:max-content;
+        flex-shrink: 0;
+      }
+    }
+
+    .action-list {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      transition-duration: .3s;
+      transition-property: opacity;
+    }
+
+    &.tag-mode {
+      .tag-list {
+        opacity: 1;
+      }
+    }
+
+    &.actions-mode {
+      .action-list {
+        opacity: 1;
+      }
+    }
+  }
+
+  .menu-icon {
+    color: var(--amber);
+    height: 24px;
+    width: 24px;
+    flex-shrink: 0;
+  }
+}

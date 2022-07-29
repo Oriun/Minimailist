@@ -1,0 +1,43 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+
+body {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+
+  &:focus {
+    // box-shadow: 0 0 12px 4px var(--picton-blue);
+  }
+}
+
+html,
+.noscrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+:root {
+  --cornflower-blue: #4361EE;
+  --picton-blue: #4CC9F0;
+  --violet-red: #F72585;
+  --gray-4: #1E1E1E;
+  --purple: #7209B7;
+  --ultramarine: #3A0CA3;
+  --amber: #F3B700;
+  --gray: #D0D0D0;
+  --gray-3: #F4F4F4;
+  --gray-2: #606060;
+
+  --gradient-blue-1: linear-gradient(180deg, #4361EE 69.27%, rgba(67, 97, 238, 0) 100%);
+}

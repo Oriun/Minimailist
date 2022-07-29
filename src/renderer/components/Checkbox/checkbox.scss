@@ -1,0 +1,17 @@
+.checkbox {
+  width: 24px;
+  aspect-ratio: 1;
+  border-radius: 2px;
+  outline: none;
+  cursor: pointer;
+
+  &.off {
+    background: #FFFFFF;
+    border: 1px solid var(--cornflower-blue);
+  }
+
+  &.on {
+    background: linear-gradient(0deg, rgba(67, 97, 238, 0.75), rgba(67, 97, 238, 0.75)), #FFFFFF;
+    border: 1px solid #FFFFFF;
+  }
+}
