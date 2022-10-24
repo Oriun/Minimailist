@@ -20,6 +20,7 @@ export type ListItemProps = {
   toggleSelected: () => void;
   deleteElement: () => void;
   hideElement: () => void;
+  openMail: () => void;
 };
 
 const ListItem: ForwardRefRenderFunction<HTMLDivElement, ListItemProps> = (
@@ -34,6 +35,7 @@ const ListItem: ForwardRefRenderFunction<HTMLDivElement, ListItemProps> = (
     toggleSelected,
     deleteElement,
     hideElement,
+    openMail,
   },
   ref
 ) => {
@@ -57,8 +59,16 @@ const ListItem: ForwardRefRenderFunction<HTMLDivElement, ListItemProps> = (
   if (selected) width = isSelected ? 350 : size.current;
   else if (isSelected) width = size.current;
 
-  const toogleFromSelection = () => {
+  const toogleFromSelection: React.MouseEventHandler<HTMLButtonElement> = (
+    event
+  ) => {
+    event.stopPropagation();
     toggleSelected();
+  };
+  const openMailAccessible: React.KeyboardEventHandler<HTMLDivElement> = (
+    e
+  ) => {
+    if (['Enter', 'Space'].includes(e.key)) openMail();
   };
   return (
     <div
@@ -69,6 +79,8 @@ const ListItem: ForwardRefRenderFunction<HTMLDivElement, ListItemProps> = (
       // onKeyDown={toogleFromSelection}
       aria-label={`Mail de ${from} le ${date} à ${time}. Objet: ${object}`}
       role="button"
+      onClick={openMail}
+      onKeyDown={openMailAccessible}
     >
       <Checkbox
         onClick={toogleFromSelection}

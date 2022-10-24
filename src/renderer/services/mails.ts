@@ -9,18 +9,20 @@ const TIME_REFERENCES = {
   THREE_MONTHS: dayjs().subtract(3, 'month').startOf('month'),
 };
 
+function refine(mail: RawMail): Mail {
+  const asDayJs = dayjs(mail.date);
+  const timestamp = asDayJs.unix() * 1000;
+  return {
+    ...mail,
+    timestamp,
+    date: asDayJs.format('DD MMM YYYY'),
+    time: asDayJs.format('HH[h]mm'),
+  } as Mail;
+}
+
 function parseMails(mails: RawMail[]): MailByPeriod {
   return mails
-    .map((mail) => {
-      const asDayJs = dayjs(mail.date);
-      const timestamp = asDayJs.unix() * 1000;
-      return {
-        ...mail,
-        timestamp,
-        date: asDayJs.format('DD MMM YYYY'),
-        time: asDayJs.format('HH[h]mm'),
-      } as Mail;
-    })
+    .map(refine)
     .sort((a, b) => b.timestamp - a.timestamp)
     .reduce(
       (prev, cur) => {
@@ -60,6 +62,16 @@ export const getMails = async (): Promise<MailByPeriod> => {
     .then((mails: RawMail[]) => {
       return parseMails(mails);
     })
+    .catch((err: Error) => {
+      console.error(err);
+    });
+};
+export const getMail = async (id: string): Promise<Mail> => {
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  return electron
+    .getMail(id)
+    .then(refine)
     .catch((err: Error) => {
       console.error(err);
     });

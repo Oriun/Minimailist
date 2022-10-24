@@ -6,6 +6,7 @@ export type Mail = {
   timestamp: number;
   from: string;
   tags: { color: string; text: string }[];
+  body: string;
 };
 
 export type RawMail = {

@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import { FC, useRef, useState, useEffect } from 'react';
 import './action-button.scss';
 import { ReactComponent as Menu } from '../../../../../assets/icones/grip-vertical.svg';
@@ -54,7 +55,12 @@ const ActionButton: FC<ActionButtonProps> = ({
   }, [mode]);
 
   return (
-    <div className="action-button" onMouseLeave={resetMode}>
+    <div
+      className="action-button"
+      onMouseLeave={resetMode}
+      onClick={(e) => e.stopPropagation()}
+      onKeyDown={(e) => e.stopPropagation()}
+    >
       <Menu
         className="menu-icon"
         onClick={toggleMode}

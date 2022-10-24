@@ -4,7 +4,7 @@ import './checkbox.scss';
 export type CheckboxProps = {
   checked?: boolean;
   ariaLabel?: string;
-  onClick: () => void;
+  onClick: React.MouseEventHandler<HTMLButtonElement>;
 };
 const Checkbox: FC<CheckboxProps> = ({
   ariaLabel = 'Checkbox',

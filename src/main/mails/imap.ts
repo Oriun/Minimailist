@@ -1,14 +1,14 @@
-import { writeFile } from 'fs/promises';
+import { access, mkdir, readFile, writeFile } from 'fs/promises';
 import Imap from 'node-imap';
 import { simpleParser } from 'mailparser';
+import dayjs from 'dayjs';
 import { createThrottle } from '../../utils/throttle';
+import { Ionos } from './providers';
 
 const imap = new Imap({
   user: 'emmanuel@nuiro.me',
   password: 'OrIuN-sInDu-StRyE-N0511-00',
-  host: 'imap.ionos.fr',
-  port: 993,
-  tls: true,
+  ...Ionos,
 });
 
 const ready = new Promise((resolve) => {
@@ -90,13 +90,13 @@ async function fetchMail(id: number): Promise<Mail> {
   //   }
   // );
 
-  mail.body = parsed.textAsHtml;
   mail.date = parsed.date?.toISOString();
   mail.from = parsed.from?.text;
   mail.id = data.attributes.uid;
   mail.object = parsed.subject;
   mail.to = !parsed.to ? [] : [parsed.to].flat(2).map((to) => to.text);
   mail.tags = [];
+  mail.body = parsed.textAsHtml;
 
   console.log(`Mail ${id} fetched`);
   return mail as Mail;
@@ -111,7 +111,7 @@ function openBox(box: string) {
   });
 }
 
-function search(criteria: unknown[]) {
+function search(criteria: unknown[]): Promise<number[]> {
   return new Promise<number[]>((resolve, reject) => {
     imap.search(criteria, (err, results) => {
       if (err) return reject(err);
@@ -120,15 +120,55 @@ function search(criteria: unknown[]) {
   });
 }
 
-export const getMails = async () => {
+type DateLike = Date | string | number | dayjs.Dayjs;
+export const getMails = async ({
+  from = dayjs().subtract(2, 'month'),
+  to = dayjs().add(2, 'day'),
+}: {
+  from?: DateLike;
+  to?: DateLike;
+} = {}) => {
+  await mkdir('mails', { recursive: true }).catch(console.log);
   await ready;
   console.time('getMails');
   await openBox('INBOX');
-  const ids = await search(['ALL', ['SINCE', 'January 01, 2022']]);
+  const ids = await search([
+    'ALL',
+    ['SINCE', dayjs(from).format('MMMM DD, YYYY')],
+    ['BEFORE', dayjs(to).format('MMMM DD, YYYY')],
+  ]);
   // await writeFile('mails.json', `[`);
-  const mails = await Promise.all(ids.map(fetchMail));
+  const mails = await Promise.all(
+    ids.map(async (id) => {
+      const exists = await access(`mails/${id}.json`).then(
+        () => true,
+        () => false
+      );
+      console.log({ exists });
+      if (exists) {
+        return JSON.parse(await readFile(`mails/${id}.json`, 'utf-8'));
+      }
+      const mail = await fetchMail(id);
+      writeFile(`mails/${id}.json`, JSON.stringify(mail, null, 4), 'utf-8');
+      return mail;
+    })
+  );
   // await writeFile('mails.json', `]`, { flag: 'a' });
   console.timeEnd('getMails');
   console.log('All mails fetched');
   return mails;
+};
+
+export const getMail = async (id: number) => {
+  await ready;
+  const exists = await access(`mails/${id}.json`).then(
+    () => true,
+    () => false
+  );
+  if (exists) {
+    return JSON.parse(await readFile(`mails/${id}.json`, 'utf-8'));
+  }
+  const mail = await fetchMail(id);
+  writeFile(`mails/${id}.json`, JSON.stringify(mail, null, 4), 'utf-8');
+  return mail;
 };

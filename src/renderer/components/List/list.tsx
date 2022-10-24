@@ -1,4 +1,5 @@
-import { Fragment, useEffect, useState } from 'react';
+import { Fragment, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useSet from '../../hooks/useSet';
 import ListItem from '../ListItem';
 import './list.scss';
@@ -11,6 +12,8 @@ const List = () => {
   const [data, setData] = useState<Partial<MailByPeriod>>({});
   const refs = useRefArray<HTMLDivElement>();
   const { has, toggle } = useSet<string>();
+  const navigate = useNavigate();
+  const container = useRef<HTMLDivElement>(null);
   const toogleSelection = (id: string) => {
     return () => {
       toggle(id);
@@ -32,6 +35,7 @@ const List = () => {
           .animate(keyframes, {
             duration,
             fill: 'forwards',
+            easing: 'ease-in-out',
           })
           .addEventListener('finish', () => {
             resolve();
@@ -126,14 +130,65 @@ const List = () => {
   };
   let index = 0;
   useEffect(() => {
+    console.log('getting mails');
     getMails()
       .then(setData)
       .catch((err) => {
         alert(err.message);
       });
   }, []);
+  useEffect(() => {
+    container.current?.animate(
+      [
+        {
+          opacity: 0,
+          offset: 0.5,
+          transform: 'translateY(100px)',
+        },
+        {
+          opacity: 1,
+          transform: 'translateY(0px)',
+        },
+      ],
+      {
+        duration: 1_500,
+        fill: 'forwards',
+        easing: 'ease-in-out',
+      }
+    );
+  }, []);
+  const pageTransition = (id: string) => {
+    return () => {
+      container.current
+        ?.animate(
+          [
+            {
+              opacity: 1,
+              transform: 'translateY(0px)',
+            },
+            {
+              opacity: 0,
+              offset: 0.75,
+              transform: 'translateY(-100px)',
+            },
+            {
+              opacity: 0,
+              transform: 'translateY(-100px)',
+            },
+          ],
+          {
+            duration: 1_000,
+            fill: 'forwards',
+            easing: 'ease-in-out',
+          }
+        )
+        .addEventListener('finish', () => {
+          navigate(`/mail/${id}`);
+        });
+    };
+  };
   return (
-    <div className="mailist">
+    <div className="mailist" ref={container}>
       {Object.keys(data).map((section) => {
         return (
           <Fragment key={section}>
@@ -153,6 +208,7 @@ const List = () => {
                   hideElement={hideElement(...params)}
                   deleteElement={deleteElement(...params)}
                   key={mail.id}
+                  openMail={pageTransition(mail.id)}
                 />
               );
             })}

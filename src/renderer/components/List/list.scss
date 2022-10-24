@@ -6,6 +6,8 @@
   gap: 12px;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  position: relative;
+  opacity: 0;
 
   .mailist-section {
     font-family: 'Nunito Sans';

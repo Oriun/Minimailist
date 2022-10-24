@@ -3,7 +3,7 @@ import { ReactComponent as ThumbUp } from '../../../../assets/icones/thumbs-up.s
 
 const Header = () => {
   const nbOfMailsThatShouldBeDeleted = 58;
-  const gramsOfCO2ToSave = nbOfMailsThatShouldBeDeleted * 10;
+  const gramsOfCO2ToSave = nbOfMailsThatShouldBeDeleted * 8.97;
   const pluralMark = nbOfMailsThatShouldBeDeleted > 1 ? 's' : '';
 
   return (
