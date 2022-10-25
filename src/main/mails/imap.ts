@@ -120,6 +120,9 @@ function search(criteria: unknown[]): Promise<number[]> {
   });
 }
 
+const ROOT = `${process.env.HOME}/.minimailist`;
+mkdir(`${ROOT}/mails`, { recursive: true }).catch(console.log);
+
 type DateLike = Date | string | number | dayjs.Dayjs;
 export const getMails = async ({
   from = dayjs().subtract(2, 'month'),
@@ -128,7 +131,6 @@ export const getMails = async ({
   from?: DateLike;
   to?: DateLike;
 } = {}) => {
-  await mkdir('mails', { recursive: true }).catch(console.log);
   await ready;
   console.time('getMails');
   await openBox('INBOX');
@@ -140,16 +142,20 @@ export const getMails = async ({
   // await writeFile('mails.json', `[`);
   const mails = await Promise.all(
     ids.map(async (id) => {
-      const exists = await access(`mails/${id}.json`).then(
+      const exists = await access(`${ROOT}/mails/${id}.json`).then(
         () => true,
         () => false
       );
       console.log({ exists });
       if (exists) {
-        return JSON.parse(await readFile(`mails/${id}.json`, 'utf-8'));
+        return JSON.parse(await readFile(`${ROOT}/mails/${id}.json`, 'utf-8'));
       }
       const mail = await fetchMail(id);
-      writeFile(`mails/${id}.json`, JSON.stringify(mail, null, 4), 'utf-8');
+      writeFile(
+        `${ROOT}/mails/${id}.json`,
+        JSON.stringify(mail, null, 4),
+        'utf-8'
+      );
       return mail;
     })
   );
@@ -161,14 +167,14 @@ export const getMails = async ({
 
 export const getMail = async (id: number) => {
   await ready;
-  const exists = await access(`mails/${id}.json`).then(
+  const exists = await access(`${ROOT}/mails/${id}.json`).then(
     () => true,
     () => false
   );
   if (exists) {
-    return JSON.parse(await readFile(`mails/${id}.json`, 'utf-8'));
+    return JSON.parse(await readFile(`${ROOT}/mails/${id}.json`, 'utf-8'));
   }
   const mail = await fetchMail(id);
-  writeFile(`mails/${id}.json`, JSON.stringify(mail, null, 4), 'utf-8');
+  writeFile(`${ROOT}/mails/${id}.json`, JSON.stringify(mail, null, 4), 'utf-8');
   return mail;
 };
